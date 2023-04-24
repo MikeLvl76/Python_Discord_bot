@@ -1,0 +1,12 @@
+# cache
+.vscode
+__pycache__
+
+# misc
+*.txt
+
+# lib
+venv
+
+# confidential
+.env
