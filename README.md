@@ -33,4 +33,18 @@ B. Setup
     pip install discord.py
     ```
 
-3. You can now start coding!
+3. Create a `.env` file to put your token within :
+
+    ```
+    TOKEN=Your token here
+    ```
+
+4. Install `dotenv` in order to use your keys in .env file :
+
+    ```bash
+    pip install python-dotenv
+    ```
+
+    **NB**: Use `os` python native library to get .env keys 
+
+5. You are free now to enjoy developping your own bot!
