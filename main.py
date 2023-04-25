@@ -2,6 +2,7 @@ import json
 import discord, os
 from discord.ext import commands
 from dotenv import load_dotenv
+from datetime import datetime
 
 load_dotenv()
 
@@ -12,7 +13,7 @@ MAIN_CHANNEL: int = int(os.getenv('MAIN_CHANNEL_ID'))
 intents = discord.Intents.default()
 intents.message_content = True
 
-bot = commands.Bot(command_prefix='?', intents=intents)
+bot = commands.Bot(intents=intents)
 
 @bot.event
 async def on_ready():
@@ -60,5 +61,17 @@ async def most_frequent_sub_sequence(ctx: commands.Context, arg: str, count: str
             most_frequent_name, most_frequent_value = item
 
     await ctx.send(json.dumps({ most_frequent_name: most_frequent_value }, indent=4))
+
+@bot.command(name="date")
+async def give_date(ctx: commands.Context):
+    now = datetime.now()
+    today = list(map(str, [now.day, now.month, now.year]))
+    await ctx.send(f'Today date is {"-".join(today)}')
+
+@bot.command(name="time")
+async def give_time(ctx: commands.Context):
+    now = datetime.now()
+    time = list(map(str, [now.hour, now.minute, now.second]))
+    await ctx.send(f'Today hour is {":".join(time)}')
 
 bot.run(TOKEN)
