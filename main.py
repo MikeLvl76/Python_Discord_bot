@@ -59,11 +59,10 @@ async def most_frequent_sub_sequence(ctx: commands.Context, arg: str, count: int
 
     await ctx.send(json.dumps({ most_frequent_name: most_frequent_value }, indent=4))
 
-@bot.command(name="max")
-async def get_max(ctx: commands.Context, *args):
+def get_max(*args):
 
     if len(args) == 0:
-        return ctx.reply('Provide at least one number')
+        return 0
     
     array = list(map(int, args))
 
@@ -71,14 +70,13 @@ async def get_max(ctx: commands.Context, *args):
     for i in range(len(array)):
         if array[i] > max:
             max = array[i]
-    
-    await ctx.send(f'Max in the list : {max}')
 
-@bot.command(name="min")
-async def get_min(ctx: commands.Context, *args):
+    return max
+
+def get_min(*args):
 
     if len(args) == 0:
-        return ctx.reply('Provide at least one number')
+        return 0
     
     array = list(map(int, args))
 
@@ -87,7 +85,49 @@ async def get_min(ctx: commands.Context, *args):
         if array[i] < min:
             min = array[i]
     
+    return min
+
+@bot.command(name="max")
+async def max_in_list(ctx: commands.Context, *args):
+    max = get_max(args)
+    await ctx.send(f'Max in the list : {max}')
+
+@bot.command(name="min")
+async def min_in_list(ctx: commands.Context, *args):
+    min = get_min(args)
     await ctx.send(f'Max in the list : {min}')
+
+@bot.command(name="sort_descending")
+async def sort_list_descending(ctx: commands.Context, *args):
+
+    if len(args) == 0:
+        return ctx.reply('Provide at least one number')
+    
+    array = list(map(int, args))
+
+    for k in range(len(array)):
+        max = get_max(*array[k:])
+        if array[k] < max:
+            index = array.index(max)
+            array[k], array[index] = max, array[k]
+            
+    await ctx.send(f'Sorted list : {array}')
+
+@bot.command(name="sort_ascending")
+async def sort_list_ascending(ctx: commands.Context, *args):
+
+    if len(args) == 0:
+        return ctx.reply('Provide at least one number')
+    
+    array = list(map(int, args))
+
+    for k in range(len(array)):
+        min = get_min(*array[k:])
+        if array[k] > min:
+            index = array.index(min)
+            array[k], array[index] = min, array[k]
+            
+    await ctx.send(f'Sorted list : {array}')
 
 @bot.command(name="date")
 async def give_date(ctx: commands.Context):
