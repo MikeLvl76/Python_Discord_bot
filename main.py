@@ -129,6 +129,21 @@ async def sort_list_ascending(ctx: commands.Context, *args):
             
     await ctx.send(f'Sorted list : {array}')
 
+@bot.command(name="bubble_sort")
+async def do_bubble_sort(ctx: commands.Context, *args):
+
+    if len(args) == 0:
+        return ctx.reply('Provide at least one number')
+    
+    array = list(map(int, args))
+
+    for i in range(len(array) - 1):
+        for j in range(len(array) - i - 1):
+            if array[j] > array[j + 1]:
+                array[j], array[j + 1] = array[j + 1], array[j]
+
+    await ctx.send(f'Sorted list : {array}')
+
 @bot.command(name="date")
 async def give_date(ctx: commands.Context):
     now = datetime.now()
