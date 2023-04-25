@@ -211,7 +211,7 @@ async def count_occurences(ctx: commands.Context, arg: str):
         color=discord.Color.blue(),
         description=f'Counting the number of occurrences of each char in this word : \'{arg}\''
     )
-    
+
     embed.set_author(name=bot.user.name, url=bot.user.default_avatar.url, icon_url=ctx.guild.icon.url)
 
     for item in res.items():
@@ -228,6 +228,6 @@ async def give_date(ctx: commands.Context):
 async def give_time(ctx: commands.Context):
     now = datetime.now()
     time = list(map(str, [now.hour, now.minute, now.second]))
-    await ctx.send(f'Today hour is {":".join(time)}')
+    await ctx.send(f'Today time is {":".join(time)}')
 
 bot.run(TOKEN)
