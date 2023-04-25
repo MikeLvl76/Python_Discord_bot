@@ -1,8 +1,7 @@
-import json
-import discord, os
-from discord.ext import commands
 from dotenv import load_dotenv
+from discord.ext import commands
 from datetime import datetime
+import discord, os, json
 
 load_dotenv()
 
@@ -13,7 +12,7 @@ MAIN_CHANNEL: int = int(os.getenv('MAIN_CHANNEL_ID'))
 intents = discord.Intents.default()
 intents.message_content = True
 
-bot = commands.Bot(intents=intents)
+bot = commands.Bot(command_prefix="?", intents=intents)
 
 @bot.event
 async def on_ready():
@@ -25,31 +24,29 @@ async def on_message(message: discord.Message):
         print(f'Message from {message.author}: {message.content}')
     await bot.process_commands(message)
 
-@bot.command()
-async def palindrome(ctx: commands.Context, *args):
+@bot.command(name="palindrome")
+async def is_palindrome(ctx: commands.Context, *args):
     if len(args) == 0:
         ctx.reply('Provide one or many words.')
     res = {arg: 'Yes' if arg == arg[::-1] else 'No' for arg in args }
     await ctx.send(json.dumps(res, indent=4))
 
 @bot.command(name='sub_sequence_frequency')
-async def most_frequent_sub_sequence(ctx: commands.Context, arg: str, count: str):
+async def most_frequent_sub_sequence(ctx: commands.Context, arg: str, count: int):
 
     if arg == '':
-        return await ctx.reply('Is this funny ? The sequence is empty.')
+        return await ctx.reply('Is this funny ? The sequence is empty.')   
 
-    size = int(count)    
-
-    if size >= len(arg):
+    if count >= len(arg):
         return await ctx.reply('The subsequence must have lower size than the sequence.')
     
-    if size == 0:
+    if count == 0:
         return await ctx.reply('What\'s the point of doing this?')
 
     res = {}
 
-    for i in range(len(arg) - (size - 1)):
-        sub: str = arg[i:i+size]
+    for i in range(len(arg) - (count - 1)):
+        sub: str = arg[i:i+count]
         freq: int = res.get(sub) or 0
         res[sub]: int = freq + 1
 
@@ -61,6 +58,36 @@ async def most_frequent_sub_sequence(ctx: commands.Context, arg: str, count: str
             most_frequent_name, most_frequent_value = item
 
     await ctx.send(json.dumps({ most_frequent_name: most_frequent_value }, indent=4))
+
+@bot.command(name="max")
+async def get_max(ctx: commands.Context, *args):
+
+    if len(args) == 0:
+        return ctx.reply('Provide at least one number')
+    
+    array = list(map(int, args))
+
+    max = array[0]
+    for i in range(len(array)):
+        if array[i] > max:
+            max = array[i]
+    
+    await ctx.send(f'Max in the list : {max}')
+
+@bot.command(name="min")
+async def get_min(ctx: commands.Context, *args):
+
+    if len(args) == 0:
+        return ctx.reply('Provide at least one number')
+    
+    array = list(map(int, args))
+
+    min = array[0]
+    for i in range(len(array)):
+        if array[i] < min:
+            min = array[i]
+    
+    await ctx.send(f'Max in the list : {min}')
 
 @bot.command(name="date")
 async def give_date(ctx: commands.Context):
