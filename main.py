@@ -144,6 +144,19 @@ async def do_bubble_sort(ctx: commands.Context, *args):
 
     await ctx.send(f'Sorted list : {array}')
 
+@bot.command(name='count_occurrences')
+async def count_occurences(ctx: commands.Context, arg: str):
+    if arg == '':
+        return await ctx.reply('Provide a word')
+    
+    res = {}
+
+    for char in arg:
+        freq: int = res.get(char) or 0
+        res[char]: int = freq + 1
+
+    await ctx.send(json.dumps(res, indent=4))
+
 @bot.command(name="date")
 async def give_date(ctx: commands.Context):
     now = datetime.now()
